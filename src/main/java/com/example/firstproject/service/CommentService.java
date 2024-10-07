@@ -30,6 +30,7 @@ public class CommentService {
             CommentDto dto = CommentDto.createCommentDto(c);
             dtos.add(dto);
         }*/
+        // 3. 결과 반환
         return commentRepository.findByArticleId(articleId)
                 .stream()
                 .map(comment -> CommentDto.createCommentDto(comment))
@@ -40,7 +41,7 @@ public class CommentService {
     public CommentDto create(Long articleId, CommentDto dto) {
         // 1. 게시글 조회 및 예외 발생
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패! " + "대상 게시글이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("댓글 생성 실패! 대상 게시글이 없습니다."));
         // 2. 댓글 엔티티 생성
         Comment comment = Comment.createComment(dto, article);
         // 3. 댓글 엔티티를 DB에 저장
@@ -53,7 +54,7 @@ public class CommentService {
     public CommentDto update(Long id, CommentDto dto) {
         // 1. 댓글 조회 및 예외 발생
         Comment target = commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("댓글 수정 실패! " + "대상 댓글이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("댓글 수정 실패! 대상 댓글이 없습니다."));
         // 2. 댓글 수정
         target.patch(dto);
         // 3. DB로 갱신
@@ -66,10 +67,11 @@ public class CommentService {
     public CommentDto delete(Long id) {
         // 1. 댓글 조회 및 예외 발생
         Comment target = commentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("댓글 삭제 실패!" + "대상이 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("댓글 삭제 실패! 대상이 없습니다."));
         // 2. 댓글 삭제
         commentRepository.delete(target);
         // 3. 삭제 댓글을 DTO로 변환 및 반환
         return CommentDto.createCommentDto(target);
     }
 }
+
